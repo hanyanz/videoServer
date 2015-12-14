@@ -102,7 +102,8 @@ public class SaveVideoFile {
 		
 		
 	}
-	
+
+	//初始化socket
 	private void InitSocket(Integer targetPort){
 		try{
 			server = new DatagramSocket(targetPort); 
