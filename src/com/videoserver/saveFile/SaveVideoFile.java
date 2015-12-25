@@ -14,7 +14,7 @@ import com.videoserver.util.DateUtil;
 import com.videoserver.util.FileHelper;
 
 public class SaveVideoFile {
-	private static final Logger logger = LoggerFactory.getLogger(FileHelper.class);
+	private static final Logger logger = LoggerFactory.getLogger(SaveVideoFile .class);
 	private  File saveFile;
 	private  DatagramSocket server = null;	    
 	private  BufferedOutputStream buffOutStream;
@@ -40,7 +40,7 @@ public class SaveVideoFile {
 			}
 		
 		}catch(Exception e){
-			System.out.println("error when saving videoFile"+e.getCause());
+			System.out.println("error when saving videoFile "+e.getMessage());
 			logger.error( "error when saving videoFile to "+ saveFile.getAbsolutePath()+ " " + e.getCause().toString());
 		}finally{
 			if(buffOutStream != null){
@@ -107,7 +107,7 @@ public class SaveVideoFile {
 	private void InitSocket(Integer targetPort){
 		try{
 			server = new DatagramSocket(targetPort); 
-			server.setSoTimeout(10000);
+			server.setSoTimeout(100*1000);
 			buffOutStream = new BufferedOutputStream(new FileOutputStream(saveFile)); 
 		}catch(Exception e){
 			System.out.println(e.getMessage());

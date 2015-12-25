@@ -49,7 +49,7 @@ public class VideoServerHandler extends IoHandlerAdapter {
 			message = message.substring(2, message.length());
 			ssn.setAttribute("client", ssn.getRemoteAddress());
 			File file = new File("D:/videoFiles/"+message+"/"+ DateUtil.getToday());
-			if(!file.exists() && !file.isDirectory()){
+			if(!file.exists() || !file.isDirectory()){
 				file.mkdir();
 			}
 			
@@ -63,26 +63,33 @@ public class VideoServerHandler extends IoHandlerAdapter {
 			message = message.substring(2,message.length());	
 			
 			//TODO:浏览器请求的处理是逻辑待定 try catch ssn.write("error")
-			
+			String ip = ssn.getRemoteAddress().toString();
+			ip = ip.substring(1,ip.indexOf(":"));
 			SendVideoFile sendVideoFile = new SendVideoFile();
-			ssn.setAttribute("sendVideoFile", sendVideoFile);
+//			ssn.setAttribute("sendVideoFile", sendVideoFile);
 			try{
-				sendVideoFile.sendVideoFile(ssn.getRemoteAddress().toString(),message.toString());
+				sendVideoFile.sendVideoFile(ip, message.toString());
+				ssn.setAttribute("sendVideoFile", sendVideoFile);
 			}catch(Exception e){
+				ssn.write("error");
 				throw e;
 			}finally{
-				ssn.write("error");
+				ssn.close(false);
 			}			
 			
 		}else if("EF".equals(message)){
 			//关闭传输视频文件给浏览器的连接
+			message = message.substring(2); //获取要关闭的端口号
+			System.out.println("the port server sending videoFile to Browser is "+ message);
+
 			if(ssn.getAttribute("sendVideoFile") != null){
+				System.out.println("stopping sending file to browser");
 				((SendVideoFile)ssn.getAttribute("sendVideoFile")).stopSendFile();
 			}
 			ssn.close(false);
 					
 		}else{
-			System.out.println("receive data without hands");
+			System.out.println("recevied error information");
 			ssn.write("error");
 			ssn.close(false);
 		}

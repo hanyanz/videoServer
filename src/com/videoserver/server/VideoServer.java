@@ -19,12 +19,12 @@ public class VideoServer {
         logger.setSessionOpenedLogLevel(LogLevel.INFO); 
         
         acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE,30); //30s       
-       
+       acceptor.getSessionConfig().setWriteTimeout(10);
 	    acceptor.getFilterChain().addLast( "codec", new ProtocolCodecFilter(new FlashCrossdomainCodec()));
 	   // acceptor.getFilterChain().addLast("logger",logger);
 	    
 	    acceptor.setHandler(new VideoServerHandler());
-	    
+
 	    acceptor.bind(new InetSocketAddress(PORT1));
 	    acceptor.bind(new InetSocketAddress(PORT2));
 	    System.out.println("HelloServer started on port " + PORT1);
