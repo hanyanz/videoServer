@@ -4,8 +4,6 @@
 # maven ignore
 target/
 
-# test ignore
-test/
 
 # eclipse ignore
 .settings/
